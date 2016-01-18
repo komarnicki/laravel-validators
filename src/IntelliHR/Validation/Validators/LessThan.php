@@ -37,6 +37,7 @@ class LessThan extends AbstractValidator
     ) {
         $this->requireParameterCount(1, $parameters, self::$name);
 
+        $value = intval($value, 10);
         $greaterThan = $parameters[0];
 
         if (is_numeric($greaterThan)) {
@@ -44,7 +45,7 @@ class LessThan extends AbstractValidator
         }
 
         if (is_string($greaterThan) && array_key_exists($greaterThan, $validator->getData())) {
-            $otherField = $validator->getData()[$greaterThan];
+            $otherField = intval($validator->getData()[$greaterThan], 10);
 
             return ($value < $otherField);
         }
