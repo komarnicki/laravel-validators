@@ -37,6 +37,7 @@ class DividesInto extends AbstractValidator
     ) {
         $this->requireParameterCount(1, $parameters, self::$name);
 
+        $value = intval($value, 10);
         $data  = $validator->getData();
 
         $start = 0;
