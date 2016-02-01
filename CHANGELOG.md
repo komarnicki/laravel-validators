@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.3
+
+ - Revert casts to ints for LessThan and GreaterThan validators
+
 ## 0.1.2
 
  - Don't allow a divisor of 0 (zero) for the DividesInto validator
