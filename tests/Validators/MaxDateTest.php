@@ -80,7 +80,7 @@ class MaxDateTest extends BaseTestCase
 
     public function testThatInvalidParameterDateFails()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->validator->validateMaxDate(
             'date',

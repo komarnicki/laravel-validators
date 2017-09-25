@@ -24,16 +24,17 @@ abstract class AbstractValidator
         }
     }
 
-    /**
-     * @throws Exception
-     */
     protected function getDateForParameter(
         string $parameter,
         string $format = null
     ): ?Carbon {
-        $date = ($format !== null)
-            ? Carbon::createFromFormat($format, $parameter)
-            : new Carbon($parameter);
+        try {
+            $date = ($format !== null)
+                ? Carbon::createFromFormat($format, $parameter)
+                : new Carbon($parameter);
+        } catch (Exception $e) {
+            return null;
+        }
 
         if ($date === false) {
             return null;

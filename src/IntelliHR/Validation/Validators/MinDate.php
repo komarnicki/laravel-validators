@@ -2,8 +2,8 @@
 
 namespace IntelliHR\Validation\Validators;
 
-use Exception;
 use Illuminate\Contracts\Validation\Validator;
+use InvalidArgumentException;
 
 class MinDate extends AbstractValidator
 {
@@ -27,14 +27,13 @@ class MinDate extends AbstractValidator
         $format = $parameters[1] ?? null;
 
         $minDate = $this->getDateForParameter($parameters[0], $format);
+        $date = $this->getDateForParameter($value, $format);
 
-        try {
-            $date = $this->getDateForParameter($value, $format);
-        } catch (Exception $e) {
-            return true;
+        if ($minDate === null) {
+            throw new InvalidArgumentException('Invalid min date parameter provided: ' . $parameters[0]);
         }
 
-        if ($date === false || $minDate === false) {
+        if ($date === null) {
             return true;
         }
 

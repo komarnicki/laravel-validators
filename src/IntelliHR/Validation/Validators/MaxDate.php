@@ -2,8 +2,8 @@
 
 namespace IntelliHR\Validation\Validators;
 
-use Exception;
 use Illuminate\Contracts\Validation\Validator;
+use InvalidArgumentException;
 
 class MaxDate extends AbstractValidator
 {
@@ -27,14 +27,13 @@ class MaxDate extends AbstractValidator
         $format = $parameters[1] ?? null;
 
         $maxDate = $this->getDateForParameter($parameters[0], $format);
+        $date = $this->getDateForParameter($value, $format);
 
-        try {
-            $date = $this->getDateForParameter($value, $format);
-        } catch (Exception $e) {
-            return true;
+        if ($maxDate === null) {
+            throw new InvalidArgumentException('Invalid max date parameter provided: ' . $parameters[0]);
         }
 
-        if ($date === false || $maxDate === false) {
+        if ($date === null) {
             return true;
         }
 
