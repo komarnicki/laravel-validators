@@ -38,7 +38,7 @@ class MinDate extends AbstractValidator
             return true;
         }
 
-        return ($date >= $minDate);
+        return $date->gte($minDate);
     }
 
     public function replaceMinDate(

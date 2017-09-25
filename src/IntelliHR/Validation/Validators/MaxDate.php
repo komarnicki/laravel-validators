@@ -38,7 +38,7 @@ class MaxDate extends AbstractValidator
             return true;
         }
 
-        return ($date <= $maxDate);
+        return $date->lte($maxDate);
     }
 
     public function replaceMaxDate(

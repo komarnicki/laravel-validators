@@ -2,7 +2,7 @@
 
 namespace IntelliHR\Validation\Validators;
 
-use DateTime;
+use Carbon\Carbon;
 use Exception;
 use InvalidArgumentException;
 
@@ -25,18 +25,20 @@ abstract class AbstractValidator
     }
 
     /**
-     * @return DateTime|bool
-     *
      * @throws Exception
      */
     protected function getDateForParameter(
         string $parameter,
         string $format = null
-    ) {
-        if ($format !== null) {
-            return DateTime::createFromFormat($format, $parameter);
+    ): ?Carbon {
+        $date = ($format !== null)
+            ? Carbon::createFromFormat($format, $parameter)
+            : new Carbon($parameter);
+
+        if ($date === false) {
+            return null;
         }
 
-        return new DateTime($parameter);
+        return $date;
     }
 }
