@@ -104,7 +104,7 @@ class GreaterThanTest extends BaseTestCase
      */
     public function testThatInsufficientParametersThrowException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->validator->validateGreaterThan(
             'size',

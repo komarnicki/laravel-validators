@@ -14,9 +14,6 @@ class MaxDateTest extends BaseTestCase
      */
     protected $validator;
 
-    /**
-     *
-     */
     public function setUp()
     {
         parent::setUp();
@@ -24,9 +21,6 @@ class MaxDateTest extends BaseTestCase
         $this->validator = new MaxDate();
     }
 
-    /**
-     *
-     */
     public function testNowIsBeforeNextWeek()
     {
         $now = (new DateTime())->format('Y-m-d');
@@ -44,9 +38,6 @@ class MaxDateTest extends BaseTestCase
         $this->assertEquals(true, $valid);
     }
 
-    /**
-     *
-     */
     public function testNowIsntBeforeLastWeek()
     {
         $now = (new DateTime())->format('Y-m-d');
@@ -64,12 +55,9 @@ class MaxDateTest extends BaseTestCase
         $this->assertEquals(false, $valid);
     }
 
-    /**
-     *
-     */
     public function testThatInsufficientParametersThrowException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->validator->validateMaxDate(
             'date',
@@ -79,9 +67,6 @@ class MaxDateTest extends BaseTestCase
         );
     }
 
-    /**
-     *
-     */
     public function testThatErrorMessageIsReplaced()
     {
         $replacement = '2100-01-01';
@@ -91,5 +76,48 @@ class MaxDateTest extends BaseTestCase
         $message = $this->validator->replaceMaxDate($string, '', '', [$replacement]);
 
         $this->assertEquals($expected, $message);
+    }
+
+    public function testThatInvalidParameterDateFails()
+    {
+        $this->expectException(\Exception::class);
+
+        $this->validator->validateMaxDate(
+            'date',
+            '2007-07-07',
+            [
+                'invalid',
+            ],
+            $this->laravelValidator
+        );
+    }
+
+    public function testThatInvalidValueDatePasses()
+    {
+        $valid = $this->validator->validateMaxDate(
+            'date',
+            'invalid',
+            [
+                '2007-07-07',
+            ],
+            $this->laravelValidator
+        );
+
+        $this->assertEquals(true, $valid);
+    }
+
+    public function testThatParametersCanBeSpecifiedWithFormat()
+    {
+        $valid = $this->validator->validateMaxDate(
+            'date',
+            '2007-07-07',
+            [
+                '09/09/2009',
+                'd/m/Y',
+            ],
+            $this->laravelValidator
+        );
+
+        $this->assertEquals(true, $valid);
     }
 }
