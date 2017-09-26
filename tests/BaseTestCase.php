@@ -4,19 +4,15 @@ namespace IntelliHR\Tests\Validation;
 
 use Illuminate\Validation\Validator;
 use Mockery;
-use Mockery\MockInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseTestCase extends PHPUnit_Framework_TestCase
+abstract class BaseTestCase extends TestCase
 {
     /**
-     * @var MockInterface
+     * @var Validator
      */
     protected $laravelValidator;
 
-    /**
-     *
-     */
     public function setUp()
     {
         $this->laravelValidator = Mockery::mock(Validator::class)
@@ -24,9 +20,7 @@ abstract class BaseTestCase extends PHPUnit_Framework_TestCase
 
         parent::setUp();
     }
-    /**
-     *
-     */
+
     protected function tearDown()
     {
         Mockery::close();

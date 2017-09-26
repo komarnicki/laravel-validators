@@ -14,9 +14,6 @@ class MinDateTest extends BaseTestCase
      */
     protected $validator;
 
-    /**
-     *
-     */
     public function setUp()
     {
         parent::setUp();
@@ -24,9 +21,6 @@ class MinDateTest extends BaseTestCase
         $this->validator = new MinDate();
     }
 
-    /**
-     *
-     */
     public function testNowIsAfterLastWeek()
     {
         $now = (new DateTime())->format('Y-m-d');
@@ -44,9 +38,6 @@ class MinDateTest extends BaseTestCase
         $this->assertEquals(true, $valid);
     }
 
-    /**
-     *
-     */
     public function testNowIsntAfterNextWeek()
     {
         $now = (new DateTime())->format('Y-m-d');
@@ -64,12 +55,9 @@ class MinDateTest extends BaseTestCase
         $this->assertEquals(false, $valid);
     }
 
-    /**
-     *
-     */
     public function testThatInsufficientParametersThrowException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->validator->validateMinDate(
             'date',
@@ -79,9 +67,6 @@ class MinDateTest extends BaseTestCase
         );
     }
 
-    /**
-     *
-     */
     public function testThatErrorMessageIsReplaced()
     {
         $replacement = '2000-01-01';
@@ -91,5 +76,48 @@ class MinDateTest extends BaseTestCase
         $message = $this->validator->replaceMinDate($string, '', '', [$replacement]);
 
         $this->assertEquals($expected, $message);
+    }
+
+    public function testThatInvalidParameterDateFails()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->validator->validateMinDate(
+            'date',
+            '2007-07-07',
+            [
+                'invalid',
+            ],
+            $this->laravelValidator
+        );
+    }
+
+    public function testThatInvalidValueDatePasses()
+    {
+        $valid = $this->validator->validateMinDate(
+            'date',
+            'invalid',
+            [
+                '2007-07-07',
+            ],
+            $this->laravelValidator
+        );
+
+        $this->assertEquals(true, $valid);
+    }
+
+    public function testThatParametersCanBeSpecifiedWithFormat()
+    {
+        $valid = $this->validator->validateMinDate(
+            'date',
+            '2007-07-07',
+            [
+                '01/01/2001',
+                'd/m/Y',
+            ],
+            $this->laravelValidator
+        );
+
+        $this->assertEquals(true, $valid);
     }
 }

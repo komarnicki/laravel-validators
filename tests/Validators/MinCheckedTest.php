@@ -67,7 +67,7 @@ class MinCheckedTest extends BaseTestCase
      */
     public function testThatInsufficientParametersThrowException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->validator->validateMinChecked(
             'date',

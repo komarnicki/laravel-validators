@@ -103,7 +103,7 @@ class LessThanTest extends BaseTestCase
      */
     public function testThatInsufficientParametersThrowException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->validator->validateLessThan(
             'size',

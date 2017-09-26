@@ -2,6 +2,8 @@
 
 namespace IntelliHR\Validation\Validators;
 
+use Carbon\Carbon;
+use Exception;
 use InvalidArgumentException;
 
 abstract class AbstractValidator
@@ -20,5 +22,24 @@ abstract class AbstractValidator
         if (count($parameters) < $count) {
             throw new InvalidArgumentException("Validation rule $rule requires at least $count parameters.");
         }
+    }
+
+    protected function getDateForParameter(
+        string $parameter,
+        string $format = null
+    ): ?Carbon {
+        try {
+            $date = ($format !== null)
+                ? Carbon::createFromFormat($format, $parameter)
+                : new Carbon($parameter);
+        } catch (Exception $e) {
+            return null;
+        }
+
+        if ($date === false) {
+            return null;
+        }
+
+        return $date;
     }
 }

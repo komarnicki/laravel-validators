@@ -2,65 +2,50 @@
 
 namespace IntelliHR\Validation\Validators;
 
-use DateTime;
 use Illuminate\Contracts\Validation\Validator;
 use InvalidArgumentException;
 
 class MaxDate extends AbstractValidator
 {
     /**
-     * Name of the validator
-     *
      * @var string
      */
     public static $name = 'max_date';
 
     /**
-     * Fallback message
-     *
      * @var string
      */
     public static $message = ':attribute must be before :max_date';
 
-    /**
-     * @param           $attribute
-     * @param           $value
-     * @param array     $parameters
-     * @param Validator $validator
-     *
-     * @return bool
-     * @throws InvalidArgumentException
-     */
     public function validateMaxDate(
         $attribute,
         $value,
         array $parameters,
         Validator $validator
-    ) {
+    ): bool {
         $this->requireParameterCount(1, $parameters, self::$name);
+        $format = $parameters[1] ?? null;
 
-        $maxDate = new DateTime($parameters[0]);
-        $date = new DateTime($value);
+        $maxDate = $this->getDateForParameter($parameters[0], $format);
+        $date = $this->getDateForParameter($value, $format);
 
-        return ($date <= $maxDate);
+        if ($maxDate === null) {
+            throw new InvalidArgumentException('Invalid max date parameter provided: ' . $parameters[0]);
+        }
+
+        if ($date === null) {
+            return true;
+        }
+
+        return $date->lte($maxDate);
     }
 
-    /**
-     * Replace all place-holders for the between rule.
-     *
-     * @param  string $message
-     * @param  string $attribute
-     * @param  string $rule
-     * @param  array  $parameters
-     *
-     * @return string
-     */
     public function replaceMaxDate(
-        $message,
-        $attribute,
-        $rule,
+        string $message,
+        string $attribute,
+        string $rule,
         array $parameters
-    ) {
+    ): string {
         return str_replace(':max_date', $parameters[0], $message);
     }
 }
